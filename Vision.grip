@@ -19,12 +19,12 @@
       <grip:Input step="0" socket="2">
         <value>
           <double>0.0</double>
-          <double>159.26621160409556</double>
+          <double>148.38737201365188</double>
         </value>
       </grip:Input>
       <grip:Input step="0" socket="3">
         <value>
-          <double>160.52158273381298</double>
+          <double>121.53776978417268</double>
           <double>255.0</double>
         </value>
       </grip:Input>
@@ -40,7 +40,7 @@
     <grip:Step name="Filter Contours">
       <grip:Input step="2" socket="0"/>
       <grip:Input step="2" socket="1">
-        <value>300.0</value>
+        <value>20.0</value>
       </grip:Input>
       <grip:Input step="2" socket="2">
         <value>50.0</value>
@@ -104,10 +104,6 @@
   </steps>
   <connections>
     <grip:Connection>
-      <grip:Output step="0" socket="0" previewed="true"/>
-      <grip:Input step="1" socket="0"/>
-    </grip:Connection>
-    <grip:Connection>
       <grip:Output step="2" socket="0" previewed="true"/>
       <grip:Input step="3" socket="0"/>
     </grip:Connection>
@@ -116,7 +112,11 @@
       <grip:Input step="2" socket="0"/>
     </grip:Connection>
     <grip:Connection>
-      <grip:Output source="1" socket="0" previewed="true"/>
+      <grip:Output step="0" socket="0" previewed="true"/>
+      <grip:Input step="1" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output source="0" socket="0" previewed="true"/>
       <grip:Input step="0" socket="0"/>
     </grip:Connection>
   </connections>
@@ -133,7 +133,7 @@
     <language>Python</language>
     <className>Vision</className>
     <implementWpilibPipeline>false</implementWpilibPipeline>
-    <saveDir>C:\Users\robotics\GRIP</saveDir>
+    <saveDir>C:\Users\Robotics\Desktop\GRIPVision</saveDir>
     <packageName></packageName>
     <moduleName>grip</moduleName>
   </codeGenerationSettings>
