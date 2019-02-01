@@ -12,9 +12,9 @@ class Vision:
         """initializes all values to presets or None if need to be set
         """
 
-        self.__hsv_threshold_hue = [58.273381294964025, 90.92150170648466]
-        self.__hsv_threshold_saturation = [116.95143884892086, 255.0]
-        self.__hsv_threshold_value = [217.85071942446044, 255.0]
+        self.__hsv_threshold_hue = [0.0, 180.0]
+        self.__hsv_threshold_saturation = [0.0, 148.38737201365188]
+        self.__hsv_threshold_value = [121.53776978417268, 255.0]
 
         self.hsv_threshold_output = None
 
@@ -24,14 +24,14 @@ class Vision:
         self.find_contours_output = None
 
         self.__filter_contours_contours = self.find_contours_output
-        self.__filter_contours_min_area = 175.0
+        self.__filter_contours_min_area = 20.0
         self.__filter_contours_min_perimeter = 50.0
         self.__filter_contours_min_width = 0.0
         self.__filter_contours_max_width = 1000.0
         self.__filter_contours_min_height = 0.0
         self.__filter_contours_max_height = 1000.0
-        self.__filter_contours_solidity = [0, 100]
-        self.__filter_contours_max_vertices = 50.0
+        self.__filter_contours_solidity = [0.0, 100]
+        self.__filter_contours_max_vertices = 500.0
         self.__filter_contours_min_vertices = 0.0
         self.__filter_contours_min_ratio = 0.0
         self.__filter_contours_max_ratio = 1000.0

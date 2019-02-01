@@ -30,17 +30,16 @@ def extra_processing(pipeline):
 
     # Publish to the '/vision/red_areas' network table
     table = NetworkTables.getTable('/GRIP/AllDemContours')
-    table.putNumberArray('x', center_x_positions)
-    table.putNumberArray('y', center_y_positions)
+    table.putNumberArray('centerX', center_x_positions)
+    table.putNumberArray('centerY', center_y_positions)
     table.putNumberArray('width', widths)
     table.putNumberArray('height', heights)
-
 
 def main():
     print('Initializing NetworkTables')
     #NetworkTables.setClientMode()
     #NetworkTables.setIPAddress('localhost')
-    NetworkTables.initialize()
+    NetworkTables.initialize(server='10.24.10.2')
 
     print('Creating OpenCL video capture')
     cap = cv2.VideoCapture(0)
