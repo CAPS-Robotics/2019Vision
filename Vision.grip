@@ -19,12 +19,12 @@
       <grip:Input step="0" socket="2">
         <value>
           <double>0.0</double>
-          <double>148.38737201365188</double>
+          <double>70.9090909090909</double>
         </value>
       </grip:Input>
       <grip:Input step="0" socket="3">
         <value>
-          <double>121.53776978417268</double>
+          <double>200.667093443889</double>
           <double>255.0</double>
         </value>
       </grip:Input>
@@ -133,7 +133,7 @@
     <language>Python</language>
     <className>Vision</className>
     <implementWpilibPipeline>false</implementWpilibPipeline>
-    <saveDir>C:\Users\Robotics\Desktop\GRIPVision</saveDir>
+    <saveDir>C:\Users\Robotics\Desktop\2019Vision</saveDir>
     <packageName></packageName>
     <moduleName>grip</moduleName>
   </codeGenerationSettings>

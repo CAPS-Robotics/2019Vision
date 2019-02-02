@@ -27,6 +27,8 @@ def extra_processing(pipeline):
         center_y_positions.append(y + h / 2)
         widths.append(w)
         heights.append(h)
+    
+    print(center_x_positions)
 
     # Publish to the '/vision/red_areas' network table
     table = NetworkTables.getTable('/GRIP/AllDemContours')
