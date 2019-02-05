@@ -5,9 +5,11 @@ Adapted from https://github.com/WPIRoboticsProjects/GRIP-code-generation/blob/ma
 """
 
 import cv2
+import numpy
 from networktables import NetworkTables
 from grip import Vision
 from multicam import startCameraServer
+from cscore import CameraServer
 
 def extra_processing(pipeline):
     """
@@ -43,20 +45,23 @@ def main():
     #NetworkTables.setIPAddress('localhost')
     NetworkTables.initialize(server='10.24.10.2')
 
-    print('Creating OpenCL video capture')
-    cap = cv2.VideoCapture(0)
-
     print('Creating pipeline')
     pipeline = Vision()
     
     print('Starting MultiCam server')
-    startCameraServer()
+    cameras = startCameraServer()
+
+    print('Creating video sink')
+    cs = CameraServer.getInstance()
+    cvSink = cs.getVideo(camera=cameras[0])
+    
+    img = numpy.zeros(shape=(640, 360, 3), dtype=numpy.uint8)
 
     print('Running pipeline')
-    while cap.isOpened():
-        have_frame, frame = cap.read()
-        if have_frame:
-            pipeline.process(frame)
+    while True:
+        time, img = cvSink.grabFrame(img)
+        if time > 0:
+            pipeline.process(img)
             extra_processing(pipeline)
 
     print('Capture closed')
