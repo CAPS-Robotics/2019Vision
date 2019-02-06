@@ -41,8 +41,6 @@ def extra_processing(pipeline):
 
 def main():
     print('Initializing NetworkTables')
-    #NetworkTables.setClientMode()
-    #NetworkTables.setIPAddress('localhost')
     NetworkTables.initialize(server='10.24.10.2')
 
     print('Creating pipeline')
