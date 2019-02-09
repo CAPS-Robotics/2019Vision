@@ -13,8 +13,8 @@ class Vision:
         """
 
         self.__hsv_threshold_hue = [0.0, 180.0]
-        self.__hsv_threshold_saturation = [0.0, 7.0]
-        self.__hsv_threshold_value = [240.0, 255.0]
+        self.__hsv_threshold_saturation = [0.0, 125.30328886130933]
+        self.__hsv_threshold_value = [122.69946754460841, 255.0]
 
         self.hsv_threshold_output = None
 
