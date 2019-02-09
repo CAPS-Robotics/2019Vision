@@ -5,9 +5,11 @@ Adapted from https://github.com/WPIRoboticsProjects/GRIP-code-generation/blob/ma
 """
 
 import cv2
+import numpy
 from networktables import NetworkTables
 from grip import Vision
 from multicam import startCameraServer
+from cscore import CameraServer
 
 def extra_processing(pipeline):
     """
@@ -19,6 +21,7 @@ def extra_processing(pipeline):
     center_y_positions = []
     widths = []
     heights = []
+    areas = []
 
     # Find the bounding boxes of the contours to get x, y, width, and height
     for contour in pipeline.filter_contours_output:
@@ -27,6 +30,8 @@ def extra_processing(pipeline):
         center_y_positions.append(y + h / 2)
         widths.append(w)
         heights.append(h)
+        area = cv2.contourArea(contour)
+        areas.append(area)
     
     #print(center_x_positions)
 
@@ -36,27 +41,29 @@ def extra_processing(pipeline):
     table.putNumberArray('centerY', center_y_positions)
     table.putNumberArray('width', widths)
     table.putNumberArray('height', heights)
+    table.putNumberArray('area', areas)
 
 def main():
     print('Initializing NetworkTables')
-    #NetworkTables.setClientMode()
-    #NetworkTables.setIPAddress('localhost')
     NetworkTables.initialize(server='10.24.10.2')
-
-    print('Creating OpenCL video capture')
-    cap = cv2.VideoCapture(0)
 
     print('Creating pipeline')
     pipeline = Vision()
     
     print('Starting MultiCam server')
-    startCameraServer()
+    cameras = startCameraServer()
+
+    print('Creating video sink')
+    cs = CameraServer.getInstance()
+    cvSink = cs.getVideo(camera=cameras[0])
+    
+    img = numpy.zeros(shape=(640, 360, 3), dtype=numpy.uint8)
 
     print('Running pipeline')
-    while cap.isOpened():
-        have_frame, frame = cap.read()
-        if have_frame:
-            pipeline.process(frame)
+    while True:
+        time, img = cvSink.grabFrame(img)
+        if time > 0:
+            pipeline.process(img)
             extra_processing(pipeline)
 
     print('Capture closed')
