@@ -21,6 +21,7 @@ def extra_processing(pipeline):
     center_y_positions = []
     widths = []
     heights = []
+    areas = []
 
     # Find the bounding boxes of the contours to get x, y, width, and height
     for contour in pipeline.filter_contours_output:
@@ -29,6 +30,8 @@ def extra_processing(pipeline):
         center_y_positions.append(y + h / 2)
         widths.append(w)
         heights.append(h)
+        area = cv2.contourArea(contour)
+        areas.append(area)
     
     print(center_x_positions)
 
@@ -38,11 +41,10 @@ def extra_processing(pipeline):
     table.putNumberArray('centerY', center_y_positions)
     table.putNumberArray('width', widths)
     table.putNumberArray('height', heights)
+    table.putNumberArray('area', areas)
 
 def main():
     print('Initializing NetworkTables')
-    #NetworkTables.setClientMode()
-    #NetworkTables.setIPAddress('localhost')
     NetworkTables.initialize(server='10.24.10.2')
 
     print('Creating pipeline')
