@@ -137,10 +137,12 @@ def startCamera(config):
     inst = CameraServer.getInstance()
     camera = UsbCamera(config.name, config.path)
     server = inst.startAutomaticCapture(camera=camera, return_server=True)
-#    server.setResolution(640, 360)
+    server.setResolution(640, 360)
 
-    camera.setConfigJson(json.dumps(config.config))
+    #camera.setConfigJson(json.dumps(config.config))
     camera.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen)
+    camera.setExposureManual(1)
+    camera.setWhiteBalanceManual(50)
 
     if config.streamConfig is not None:
         server.setConfigJson(json.dumps(config.streamConfig))

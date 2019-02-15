@@ -10,6 +10,11 @@ from networktables import NetworkTables
 from grip import Vision
 from multicam import startCameraServer
 from cscore import CameraServer
+from time import time
+from threading import Thread
+
+img = numpy.zeros(shape=(640, 360, 3), dtype=numpy.uint8)
+pipeline = Vision()
 
 def extra_processing(pipeline):
     """
@@ -33,7 +38,7 @@ def extra_processing(pipeline):
         area = cv2.contourArea(contour)
         areas.append(area)
     
-    #print(center_x_positions)
+    print(center_x_positions)
 
     # Publish to the '/vision/red_areas' network table
     table = NetworkTables.getTable('/GRIP/AllDemContours')
@@ -43,28 +48,45 @@ def extra_processing(pipeline):
     table.putNumberArray('height', heights)
     table.putNumberArray('area', areas)
 
+def loop_grab():
+    global cvSink
+    global img
+    while True:
+        grabtime = time()
+        sinktime, img = cvSink.grabFrame(img)
+        print("Grab Time %.3f" % (grabtime - time()))
+
+def loop_process():
+    global pipeline
+    global img
+    while True:
+        processtime = time()
+        pipeline.process(img)
+        extra_processing(pipeline)
+        print("Process Time %.3f" % (processtime - time()))
+
 def main():
     print('Initializing NetworkTables')
     NetworkTables.initialize(server='10.24.10.2')
-
-    print('Creating pipeline')
-    pipeline = Vision()
     
     print('Starting MultiCam server')
     cameras = startCameraServer()
 
     print('Creating video sink')
     cs = CameraServer.getInstance()
+    global cvSink
     cvSink = cs.getVideo(camera=cameras[0])
     
-    img = numpy.zeros(shape=(640, 360, 3), dtype=numpy.uint8)
+    grabtime = 0
+    processtime = 0
+    networktime = 0
 
     print('Running pipeline')
-    while True:
-        time, img = cvSink.grabFrame(img)
-        if time > 0:
-            pipeline.process(img)
-            extra_processing(pipeline)
+    grab_thread = Thread(target = loop_grab)
+    process_thread = Thread(target = loop_process)
+    grab_thread.start()
+    process_thread.start()
+    grab_thread.join()
 
     print('Capture closed')
 
