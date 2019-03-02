@@ -9,6 +9,7 @@
 import json
 import time
 import sys
+import os
 
 from cscore import CameraServer, VideoSource, UsbCamera, MjpegServer
 from networktables import NetworkTablesInstance
@@ -137,12 +138,22 @@ def startCamera(config):
     inst = CameraServer.getInstance()
     camera = UsbCamera(config.name, config.path)
     server = inst.startAutomaticCapture(camera=camera, return_server=True)
-    server.setResolution(640, 360)
+    #server.setResolution(640, 360)
 
-    #camera.setConfigJson(json.dumps(config.config))
-    camera.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen)
-    camera.setExposureManual(1)
-    camera.setWhiteBalanceManual(50)
+    camera.setConfigJson(json.dumps(config.config))
+    if config.path == "/dev/video0":
+        camera.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen)
+        #camera.setExposureManual(1)
+        #camera.setWhiteBalanceManual(50)
+        #os.system("v4l2-ctl -d /dev/video0 -c auto_exposure=1")
+        #os.system("v4l2-ctl -d /dev/video0 -c exposure_time_absolute=100")
+        #os.system("")
+        camera.getProperty("auto_exposure").set(1)
+        camera.getProperty("exposure_time_absolute").set(50)
+        camera.getProperty("contrast").set(100)
+        #camera.getProperty("white_balance_temperature_auto").set(0)
+        #for prop in camera.enumerateProperties():
+            #print(prop.getName())
 
     if config.streamConfig is not None:
         server.setConfigJson(json.dumps(config.streamConfig))
@@ -172,3 +183,8 @@ def startCameraServer():
         cameras.append(startCamera(cameraConfig))
         
     return cameras
+
+if __name__ == '__main__':
+    startCameraServer()
+    while True:
+        pass

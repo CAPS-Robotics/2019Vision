@@ -38,7 +38,7 @@ def extra_processing(pipeline):
         area = cv2.contourArea(contour)
         areas.append(area)
     
-    print(center_x_positions)
+    #print(center_x_positions)
 
     # Publish to the '/vision/red_areas' network table
     table = NetworkTables.getTable('/GRIP/AllDemContours')
